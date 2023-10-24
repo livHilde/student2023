@@ -1,1 +1,3 @@
-What should we write here?
+Contact: security@northen-tech.no
+Acknowledgements: https://northen-tech.no/bug-bounty
+Singature: hhtps://northen-tech.no/.well-known/security.txt.sig
