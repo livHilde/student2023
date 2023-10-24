@@ -33,7 +33,7 @@ If you don't already have Docker installed, you can begin by visiting https://ww
 After installing and starting docker, you can run this project with docker-compose:
 
 ```
-$ docker-compose build && docker-compose up
+docker-compose build && docker-compose up
 ```
 
 The web application should be available at:
@@ -43,13 +43,13 @@ http://localhost:5000/
 To shut down the project, run:
 
 ```
-$ docker-compose down
+docker-compose down
 ```
 
 If you broke the webapp / database, and want a fresh start, run:
 
 ```
-$ docker-compose down ; rm -rf ./data/* ; docker-compose build && docker-compose up
+docker-compose down ; rm -rf ./data/* ; docker-compose build && docker-compose up
 ```
 
 ### Commits and pull requests
