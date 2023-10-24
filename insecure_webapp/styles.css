@@ -1,0 +1,92 @@
+body {
+  font-family: Helvetica, Arial, sans-serif;
+  min-width: 200px;
+  background-color: #dddddd;
+}
+
+h1 {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+button {
+  background-color: #14a452;
+  width: 100%;
+  color: #ffffff;
+  padding: 15px;
+  margin: 10px 0px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: all ease-in-out 0.25s;
+}
+
+button:hover {
+  background-color: #006127;
+}
+
+.login_form {
+  max-width: 400px;
+  margin: auto;
+  border-radius: 5px;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  margin: 8px 0;
+  padding: 12px 20px;
+  display: inline-block;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: 2px solid #999999;
+}
+
+.container {
+  padding: 25px;
+  background-color: #ffffff;
+  border-radius: 5px;
+}
+
+.max_width {
+  max-width: 640px;
+  padding: 20px;
+  margin: auto;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+}
+
+.calendar {
+  white-space: pre;
+  font-family: monospace;
+  border: 2px solid #999999;
+  border-radius: 5px;
+  padding: 15px;
+  margin: 0;
+}
+
+.author {
+  color: #999999;
+  font-style: italic;
+  text-align: right;
+}
+
+.comment {
+  border-bottom:  2px solid #999999;
+  padding-bottom: 10px;
+  margin-bottom: 30px;
+}
+
+.comments {
+  margin-top: 30px;
+}
+
+.login {
+  margin-bottom: 30px;
+}

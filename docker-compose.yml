@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  insecure_webapp:
+    build:
+      context: insecure_webapp
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./insecure_webapp:/insecure_webapp
+    command: >
+      sh flask-entrypoint.sh
+    environment:
+      - PGHOST=db
+      - PGDATABASE=data
+      - PGUSER=vinhle
+      - PGPASSWORD=password
+    depends_on:
+      - db
+  db:
+    image: postgres:12.11-alpine3.15
+    environment:
+      - POSTGRES_DB=data
+      - POSTGRES_USER=vinhle
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+    volumes:
+    - ./data:/var/lib/postgresql/data

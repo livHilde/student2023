@@ -1,0 +1,102 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <title>Very insecure webapp</title>
+  </head>
+  <body>
+    <div class="max_width container">
+    <center><h1>Very insecure social media</h1></center>
+    <div class="comments" id="comments">Comments are loading...</div>
+    <form id="comment_form" class="comment_form" onsubmit="event.preventDefault(); submitCommentForm(event);">
+      <input
+        type="text"
+        placeholder="Write your comment here"
+        name="comment"
+        required
+      />
+      <center style="color: #ff0000" id="wrong_password"></center>
+      <button type="submit">Post</button>
+    </form>
+    <div class="center"><div class="login" id="login"><a href="/login">Log in</a></div></div>
+    <div class="center"><div class="calendar" id="calendar">
+      Calendar is loading...
+    </div></div>
+    <div style="margin-top: 20px" class="center"><img src = "/favicon.svg" alt="padlock"/></div>
+  </div>
+  </body>
+  <script>
+    async function get(url) {
+      const response = await fetch(url, {
+        method: "GET",
+        cache: "no-cache",
+      });
+      return response.text();
+    }
+
+    function getCookie(key) {
+      return document.cookie
+        .split("; ")
+        .find((row) => row.startsWith(key + "="))
+        ?.split("=")[1];
+    }
+
+    function checkLogin() {
+      const username = getCookie("username");
+      if (username) {
+        html = "Logged in as " + username + ' (<a href="#" onclick="return logout();">Log out</a>)';
+        document.getElementById("login").innerHTML = html;
+      }
+    }
+    checkLogin();
+
+    get("/calendar").then((data) => {
+      document.getElementById("calendar").innerHTML = data;
+    });
+
+    async function postData(url = "", data = {}) {
+      const response = await fetch(url, {
+        method: "POST",
+        cache: "no-cache",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        redirect: "follow",
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) {
+        return null;
+      }
+      return response.json();
+    }
+
+    function submitCommentForm(event) {
+      const comment = event.target[0].value;
+      const username = getCookie("username");
+      const request = { username: username, comment: comment };
+      console.log(username);
+      console.log(comment);
+
+      postData("/api/comments", request).then((data) => {
+        console.log(data);
+        if (data === null) {
+          return;
+        }
+        window.location = "/";
+      });
+    }
+
+    function removeCookie(name) {
+      document.cookie = name +"=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+    }
+
+    function logout() {
+      removeCookie("username");
+      removeCookie("password");
+      removeCookie("session");
+      window.location = "/";
+    }
+  </script>
+</html>

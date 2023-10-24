@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <title>Login</title>
+  </head>
+  <body>
+      <div class="container login_form">
+        <center><h1>Login</h1></center>
+        <form class="login_form" onsubmit="event.preventDefault(); submitLoginForm(event);">
+        <label>Username:</label>
+        <input
+          type="text"
+          placeholder="Enter username"
+          name="username"
+          required
+        />
+        <label>Password:</label>
+        <input
+          type="password"
+          placeholder="Enter password"
+          name="password"
+          required
+        />
+        <center style="color: #ff0000" id="wrong_password"></center>
+        <button type="submit">Login</button>
+        <center>New user? <a href="/signup">Sign up here</a></center>
+        <a href="/">&lt Back</a>
+      </form>
+      <div style="margin-top: 20px" class="center"><img src = "/favicon.svg" alt="padlock"/></div>
+      </div>
+  </body>
+  <script>
+    async function postData(url = "", data = {}) {
+      const response = await fetch(url, {
+        method: "POST",
+        cache: "no-cache",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        redirect: "follow",
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) {
+        return null;
+      }
+      return response.json();
+    }
+    function submitLoginForm(event) {
+      const username = event.target[0].value;
+      const password = event.target[1].value;
+      const credentials = { username: username, password: password };
+      console.log(username);
+      console.log(password);
+
+      postData("/api/login", credentials).then((data) => {
+        console.log(data);
+        if (data === null) {
+          document.getElementById("wrong_password").innerHTML =
+            "User already exists!";
+          return;
+        }
+        // After successfully logging in, store the response details:
+        document.cookie = "username=" + data["username"];
+        document.cookie = "password=" + data["password"];
+        document.cookie = "session=" + data["session"];
+        // Go back to main page now that we are logged in:
+        window.location = "/";
+      });
+    }
+  </script>
+</html>
