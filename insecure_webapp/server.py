@@ -92,6 +92,27 @@ def send_file(path):
     abort(404)
 
 
+def complete_login(username, password):
+    # This function completes a login
+    # (username and password have already been verified)
+
+    # Generate session token:
+    h = hashlib.new("md5")
+    h.update(username.encode("utf-8"))
+    h.update(password.encode("utf-8"))
+    session = h.hexdigest()
+
+    # Update session token in database
+    results = run_query(
+        f"INSERT INTO users(username, password, session) "
+        + f"VALUES('{username}', '{password}', '{session}') "
+        + f"ON CONFLICT(username) DO UPDATE SET session = '{session}';"
+    )
+    print("Database response:")
+    print(results)
+    return jsonify({"username": username, "password": password, "session": session})
+
+
 @app.route("/api/login", methods=["POST"])
 def login_api():
     content = request.json
@@ -100,6 +121,8 @@ def login_api():
 
     # Get the appropriate user:
     username = content["username"]
+    password = content["password"]
+    print(f"username: '{username}' password: '{password}'")
     results = run_query(
         f"SELECT username, password, session "
         + f"FROM users "
@@ -109,27 +132,10 @@ def login_api():
     # Check if password is correct:
     if len(results) > 0:
         print(results)
-        password = results[0][1]
-        if password != content["password"]:
+        if password != results[0][1]:
             abort(404)
 
-    # Generate session token:
-    h = hashlib.new("md5")
-    h.update(content["username"].encode("utf-8"))
-    h.update(content["password"].encode("utf-8"))
-    content["session"] = h.hexdigest()
-
-    # Update session token in database
-    results = run_query(
-        f"INSERT INTO users(username, password, session) "
-        + f"VALUES('{content['username']}', '{content['password']}', '{content['session']}') "
-        + f"ON CONFLICT(username) DO UPDATE SET session = '{content['session']}';"
-    )
-    print("Database response:")
-    print(results)
-    print("User object:")
-    print(str(content))
-    return jsonify(content)
+    return complete_login(username, password)
 
 
 @app.route("/api/comments", methods=["POST"])
