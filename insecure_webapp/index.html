@@ -48,6 +48,8 @@
       if (username) {
         html = "Logged in as " + username + ' (<a href="#" onclick="return logout();">Log out</a>)';
         document.getElementById("login").innerHTML = html;
+      } else {
+        document.getElementById("comment_form").style = "display: none";
       }
     }
     checkLogin();
